@@ -67,14 +67,6 @@ export function ConsolePage() {
    * Ask user for API Key
    * If we're using the local relay server, we don't need this
    */
-  const apiKey = LOCAL_RELAY_SERVER_URL
-    ? ''
-    : localStorage.getItem('tmp::voice_api_key') ||
-      prompt('OpenAI API Key') ||
-      '';
-  if (apiKey !== '') {
-    localStorage.setItem('tmp::voice_api_key', apiKey);
-  }
 
   /**
    * Instantiate:
@@ -93,7 +85,7 @@ export function ConsolePage() {
       LOCAL_RELAY_SERVER_URL
         ? { url: LOCAL_RELAY_SERVER_URL }
         : {
-            apiKey: apiKey,
+            apiKey: process.env.REACT_APP_GPT_KEY,
             dangerouslyAllowAPIKeyInBrowser: true,
           },
     ),
@@ -171,11 +163,10 @@ export function ConsolePage() {
     }
   }, []);
   async function getAccessToken() {
-    const HEYGEN_API_KEY =
-      'NGJlYTM4MDNhMGVmNGY5YTk0OGJjYmNjM2VjNGExMTQtMTczMTAxMDIzNw==';
+    const heygenKey = process.env.REACT_APP_HEYGEN_KEY;
 
     try {
-      if (!HEYGEN_API_KEY) {
+      if (!heygenKey) {
         throw new Error('API key is missing from .env');
       }
 
@@ -184,7 +175,7 @@ export function ConsolePage() {
         {
           method: 'POST',
           headers: {
-            'x-api-key': HEYGEN_API_KEY,
+            'x-api-key': heygenKey,
           },
         },
       );
@@ -633,17 +624,6 @@ export function ConsolePage() {
         <div className="content-title">
           <img src="/salesai-logo-bw.png" />
           <span>sales.ai</span>
-        </div>
-        <div className="content-api-key">
-          {!LOCAL_RELAY_SERVER_URL && (
-            <Button
-              icon={Edit}
-              iconPosition="end"
-              buttonStyle="flush"
-              label={`api key: ${apiKey.slice(0, 3)}...`}
-              onClick={() => resetAPIKey()}
-            />
-          )}
         </div>
       </div>
       <div className="content-main">
