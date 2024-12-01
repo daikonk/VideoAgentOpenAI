@@ -6,6 +6,7 @@ To add the HeyGen key create an .env at the root:
 
 ```
 REACT_APP_HEYGEN_API_KEY=<YOUR_HEYGEN_KEY>
+REACT_APP_GPT_KEY=<YOUR_GPT_KEY>
 ```
 
 Install and run:
